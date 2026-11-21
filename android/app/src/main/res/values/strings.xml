@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rython-Authenticator</string>
+
+    <string name="action_back">Back</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_save">Save</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_search">Search</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_add">Add</string>
+    <string name="action_close">Close</string>
+
+    <!-- Accounts list -->
+    <string name="accounts_empty_title">No accounts yet</string>
+    <string name="accounts_empty_body">Tap + to paste the link from a service or enter the account manually</string>
+    <string name="accounts_no_results">Nothing found</string>
+    <string name="accounts_search_placeholder">Search service or label</string>
+    <string name="accounts_filter_all">All</string>
+    <string name="accounts_add_title">Add account</string>
+    <string name="accounts_add_body">Scan a QR code with the camera, paste the link the service shows next to it, or enter the details manually.</string>
+    <string name="accounts_scan_qr">Scan QR code</string>
+    <string name="accounts_add_manual">Add manually</string>
+    <string name="accounts_next_code">Next code</string>
+    <string name="accounts_copied">Code for %1$s copied</string>
+
+    <!-- Editor -->
+    <string name="editor_title_add">Add manually</string>
+    <string name="editor_title_edit">Edit account</string>
+    <string name="editor_issuer">Service (for example GitHub)</string>
+    <string name="editor_name">Account name (optional)</string>
+    <string name="editor_secret">Secret key</string>
+    <string name="editor_secret_help">The long text the service gives you. Spaces and = are ignored.</string>
+    <string name="editor_type">Code type</string>
+    <string name="editor_algorithm">Hash algorithm</string>
+    <string name="editor_digits">Digits</string>
+    <string name="editor_period">Period (seconds)</string>
+    <string name="editor_counter">Initial counter</string>
+    <string name="editor_folder">Folder / label (optional)</string>
+    <string name="editor_preview">Code preview: %1$s</string>
+    <string name="editor_error_name">Enter a service or account name</string>
+    <string name="editor_error_secret">Enter the secret key</string>
+    <string name="editor_error_secret_format">The secret key is not valid. Copy it again exactly from the service.</string>
+    <string name="editor_delete_title">Delete account?</string>
+    <string name="editor_delete_body">%1$s will be deleted. This cannot be undone.</string>
+
+    <!-- Scanner -->
+    <string name="scan_permission_needed">Camera access is required to scan QR codes</string>
+    <string name="scan_permission_denied">Camera permission was not granted</string>
+    <string name="scan_allow">Allow</string>
+    <string name="scan_camera_unavailable">Camera is unavailable</string>
+    <string name="scan_unsupported">This QR code is not supported</string>
+    <string name="scan_start_failed">Could not start the camera: %1$s</string>
+    <string name="scan_hint_continuous">Hold each QR code inside the frame; you can scan several in a row\n(received: %1$d)</string>
+    <string name="scan_hint_single">Place the authenticator QR code inside the frame\n(a normal authenticator QR or a Google Authenticator export)</string>
+
+    <!-- Transfer codes -->
+    <string name="transfer_title">Transfer codes</string>
+    <string name="transfer_heading">Transfer from Google Authenticator</string>
+    <string name="transfer_steps">1. In Google Authenticator open the menu.\n2. Choose Transfer accounts, then Export accounts.\n3. Select the accounts you want to move.\n4. Scan the QR code shown with the button below.\nIf you selected more than 10 accounts Google shows several QR codes in a row; scan all of them.</string>
+    <string name="transfer_scan">Scan transfer QR code</string>
+    <string name="transfer_paste">Paste the export link from the clipboard</string>
+    <string name="transfer_received">Received</string>
+    <string name="transfer_empty">No codes received yet.</string>
+    <string name="transfer_add">Add accounts</string>
+    <string name="transfer_add_count">Add %1$d accounts to the app</string>
+    <string name="transfer_count">%1$d accounts</string>
+    <string name="transfer_batch">Batch %1$d of %2$d</string>
+
+    <!-- Messages -->
+    <string name="msg_saved">Saved</string>
+    <string name="msg_deleted">Account deleted</string>
+    <string name="msg_not_export">This is not a Google Authenticator export</string>
+    <string name="msg_not_export_text">This text is not a Google Authenticator export</string>
+    <string name="msg_already_received">This code was already received</string>
+    <string name="msg_received_count">%1$d accounts received</string>
+    <string name="msg_read_count">%1$d accounts read from this code</string>
+    <string name="msg_nothing_found">No account found in the code</string>
+    <string name="msg_already_added">This account was already added</string>
+    <string name="msg_added_named">%1$s added</string>
+    <string name="msg_added_count">%1$d accounts added</string>
+    <string name="msg_transfer_invalid">Nothing added (duplicate or invalid)</string>
+    <string name="msg_all_existing">All of these accounts already existed</string>
+    <string name="msg_nothing_added">No accounts added</string>
+    <string name="msg_clipboard_empty">No link text in the clipboard</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_biometric_title">Biometric lock</string>
+    <string name="settings_biometric_on">Ask for fingerprint or face when opening the app</string>
+    <string name="settings_biometric_unavailable">This device does not support biometric lock</string>
+    <string name="settings_language_title">Language</string>
+    <string name="settings_language_body">The app language. It changes immediately and is kept after restart.</string>
+    <string name="settings_transfer_title">Transfer codes</string>
+    <string name="settings_transfer_body">Move accounts from Google Authenticator with Transfer accounts, then Export accounts. The QR codes are read directly here.</string>
+    <string name="settings_transfer_button">Import from Google Authenticator</string>
+    <string name="settings_backup_title">Backup</string>
+    <string name="settings_backup_body">The backup is protected with both app passwords. Both are needed to open it, and if you forget them the file cannot be recovered.</string>
+    <string name="settings_backup_create">Create encrypted backup</string>
+    <string name="settings_backup_restore">Restore from backup file</string>
+    <string name="settings_about_title">About</string>
+    <string name="settings_about_body">Rython-Authenticator 1.0\nTwo-step login codes like Google Authenticator: time-based, counter-based and Steam codes, plus QR scanning and import from Google Authenticator.\nEverything stays on this device, protected; the network is used only for the optional time sync.\nAccounts: %1$d</string>
+    <string name="settings_clear_all">Delete all accounts</string>
+    <string name="settings_clear_title">Delete all accounts?</string>
+    <string name="settings_clear_body">This cannot be undone. If you have no backup yet, create one first.</string>
+    <string name="settings_clear_confirm">Delete</string>
+    <string name="settings_passwords_title">App passwords</string>
+    <string name="settings_passwords_body">Two passwords are asked for in order every time the app starts.</string>
+    <string name="settings_passwords_change_first">Change password 1</string>
+    <string name="settings_passwords_change_second">Change password 2</string>
+    <string name="change_passwords_current_first">Current password 1</string>
+    <string name="change_passwords_current_second">Current password 2</string>
+    <string name="change_passwords_new_first">New password 1</string>
+    <string name="change_passwords_new_second">New password 2</string>
+    <string name="change_passwords_note">The accounts on this device stay readable. Backups you already made still open with the old passwords, so create a new backup after changing.</string>
+    <string name="msg_passwords_changed">Passwords changed</string>
+
+    <string name="msg_biometric_enabled">Biometric lock enabled</string>
+    <string name="msg_biometric_disabled">Biometric lock disabled</string>
+    <string name="msg_biometric_missing">This device has no biometric lock</string>
+    <string name="msg_biometric_unavailable">Biometric lock is unavailable</string>
+    <string name="msg_backup_saved">Backup saved</string>
+    <string name="msg_backup_save_failed">Could not save the backup</string>
+    <string name="msg_backup_read_failed">Could not read the backup file</string>
+    <string name="msg_backup_empty">The file contained no accounts</string>
+    <string name="msg_restored_count">%1$d accounts restored</string>
+    <string name="msg_restore_failed">Restore failed: wrong passwords or invalid file</string>
+    <string name="msg_all_deleted">All accounts deleted</string>
+
+    <!-- Backup password dialog -->
+    <string name="backup_dialog_title_export">Backup passwords</string>
+    <string name="backup_dialog_title_import">Passwords for this backup file</string>
+    <string name="backup_dialog_first">Password 1</string>
+    <string name="backup_dialog_second">Password 2</string>
+    <string name="backup_dialog_create">Create file</string>
+    <string name="backup_dialog_restore">Restore</string>
+    <string name="backup_dialog_legacy">Old-format backup: only password 1 is used.</string>
+    <string name="backup_error_short">Password %1$d must be at least %2$d characters</string>
+
+    <!-- Lock / passwords -->
+    <string name="lock_title">Rython-Authenticator is locked</string>
+    <string name="lock_body">Confirm your identity to see the codes</string>
+    <string name="lock_unlock">Unlock</string>
+    <string name="lock_quit">Quit</string>
+    <string name="prompt_subtitle">Authenticate to open your codes</string>
+    <string name="prompt_cancel">Cancel</string>
+    <string name="unlock_title">Unlock</string>
+    <string name="unlock_step1">Enter password 1</string>
+    <string name="unlock_step2">Enter password 2</string>
+    <string name="unlock_wrong">Wrong password</string>
+    <string name="unlock_continue">Continue</string>
+    <string name="unlock_open">Open</string>
+    <string name="unlock_hint">Both passwords are required, one after the other.</string>
+    <string name="setup_title">Create app passwords</string>
+    <string name="setup_step1">Choose password 1</string>
+    <string name="setup_step2">Choose password 2</string>
+    <string name="setup_repeat">Repeat password</string>
+    <string name="setup_next">Next</string>
+    <string name="setup_done">Finish</string>
+    <string name="setup_mismatch">The passwords do not match</string>
+    <string name="setup_too_short">Use at least %1$d characters</string>
+    <string name="setup_note">Both passwords will be asked for every time the app opens and are used to encrypt backups. They cannot be recovered.</string>
+    <string name="password_label">Password</string>
+    <string name="password_show">Show password</string>
+    <string name="password_hide">Hide password</string>
+    <string name="msg_vault_read_failed">The saved accounts could not be read</string>
+    <string name="msg_vault_corrupt">The saved accounts are damaged</string>
+    <string name="msg_vault_save_failed">Saving failed</string>
+    <!-- Time -->
+    <string name="settings_time_title">Time and timezone</string>
+    <string name="settings_time_body">If your accounts are based on a different timezone, or the device clock is wrong, adjust here. Codes are computed from this time.</string>
+    <string name="settings_timezone_title">Timezone for codes</string>
+    <string name="settings_timezone_device">Device default (no change)</string>
+    <string name="settings_timezone_pick">Choose timezone</string>
+    <string name="settings_internet_time_title">Use internet time</string>
+    <string name="settings_internet_time_body">Fetch the correct time from the internet and ignore the device clock.</string>
+    <string name="settings_internet_sync">Sync now</string>
+    <string name="settings_internet_sync_ok">Time synced</string>
+    <string name="settings_internet_sync_fail">Could not sync time</string>
+</resources>

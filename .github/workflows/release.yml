@@ -1,0 +1,176 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  android:
+    name: Android APKs
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: |
+          sdkmanager "platforms;android-34" "build-tools;34.0.0"
+
+      # The release key is never in the repository. It is stored as the
+      # ANDROID_KEYSTORE_BASE64 secret and restored here only for the build.
+      # Without it the build falls back to debug signing (installs fine, but the
+      # signature differs from a previously shipped release).
+      - name: Restore signing key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "::warning::ANDROID_KEYSTORE_BASE64 is not set - building debug-signed APKs."
+            exit 0
+          fi
+          mkdir -p app
+          printf '%s' "$KEYSTORE_BASE64" | base64 -d > app/rython-release.jks
+          umask 077
+          {
+            echo "storeFile=app/rython-release.jks"
+            echo "storePassword=$STORE_PASSWORD"
+            echo "keyAlias=${KEY_ALIAS:-rython}"
+            echo "keyPassword=${KEY_PASSWORD:-$STORE_PASSWORD}"
+          } > keystore.properties
+
+      - name: Build release APKs
+        run: ./gradlew assembleRelease --console=plain
+
+      - name: Name the APKs after the tag
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          out=dist
+          mkdir -p "$out"
+          for apk in app/build/outputs/apk/release/*.apk; do
+            name="$(basename "$apk" .apk)"
+            case "$name" in
+              *armeabi-v7a*) abi=armeabi-v7a ;;
+              *arm64-v8a*)   abi=arm64-v8a ;;
+              *universal*)   abi=universal ;;
+              *)             abi=unknown ;;
+            esac
+            cp "$apk" "$out/Rython-Authenticator-${version}-${abi}.apk"
+          done
+          ls -l "$out"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android
+          path: android/dist/*.apk
+          if-no-files-found: error
+
+  desktop-linux:
+    name: Desktop (Linux)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Install packaging tools
+        run: sudo apt-get update && sudo apt-get install -y rpm
+
+      - name: Build deb, rpm and app image
+        run: ./gradlew packageDeb packageRpm createDistributable --console=plain
+
+      - name: Collect artifacts
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          mkdir -p dist
+          cp build/compose/binaries/main/deb/*.deb "dist/Rython-Authenticator-${version}-linux-amd64.deb" || true
+          cp build/compose/binaries/main/rpm/*.rpm "dist/Rython-Authenticator-${version}-linux-amd64.rpm" || true
+          (cd build/compose/binaries/main/app && zip -qr "${GITHUB_WORKSPACE}/desktop/dist/Rython-Authenticator-${version}-linux-amd64.zip" .)
+          ls -l dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-linux
+          path: |
+            desktop/dist/*.deb
+            desktop/dist/*.rpm
+            desktop/dist/*.zip
+          if-no-files-found: error
+
+  desktop-windows:
+    name: Desktop (Windows)
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Build msi, exe and app image
+        run: |
+          .\gradlew.bat createDistributable --console=plain
+          .\gradlew.bat packageMsi packageExe --console=plain
+
+      - name: Collect artifacts
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          mkdir -p dist
+          cp build/compose/binaries/main/msi/*.msi "dist/Rython-Authenticator-${version}-windows-x64.msi"
+          cp build/compose/binaries/main/exe/*.exe "dist/Rython-Authenticator-${version}-windows-x64.exe"
+          (cd build/compose/binaries/main/app && 7z a -tzip "Rython-Authenticator-${version}-windows-x64.zip" . > /dev/null)
+          mv "build/compose/binaries/main/app/Rython-Authenticator-${version}-windows-x64.zip" dist/
+          ls -l dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-windows
+          path: |
+            desktop/dist/*.msi
+            desktop/dist/*.exe
+            desktop/dist/*.zip
+          if-no-files-found: error
+
+  release:
+    name: Publish release
+    needs: [android, desktop-linux, desktop-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: List release files
+        run: ls -l dist
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
+          fail_on_unmatched_files: true

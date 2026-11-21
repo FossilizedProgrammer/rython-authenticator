@@ -1,0 +1,27 @@
+# Gradle / Android / Compose build output
+.gradle/
+.kotlin/
+build/
+app/build/
+out/
+local.properties
+
+# Release signing secrets
+keystore.properties
+*.jks
+*.keystore
+
+# Release artifacts (built by GitHub Actions)
+dist/
+*.apk
+*.aab
+*.deb
+*.rpm
+*.msi
+*.exe
+
+# IDE / OS noise
+.idea/
+*.iml
+.DS_Store
+.freebuff/
