@@ -22,11 +22,28 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - uses: android-actions/setup-android@v3
-
-      - name: Install Android SDK packages
+      - name: Install Android platform and build-tools
         run: |
-          sdkmanager "platforms;android-34" "build-tools;34.0.0"
+          # The runner image already ships the SDK, so only the platform and
+          # build-tools this project compiles against are added. sdkmanager is
+          # located by glob because its cmdline-tools directory is versioned.
+          SDK="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          SDKM="$(ls "$SDK"/cmdline-tools/*/bin/sdkmanager 2>/dev/null | tail -1)"
+          if [ -z "$SDKM" ]; then
+            echo "::warning::no sdkmanager on the image, using the SDK as-is"
+            exit 0
+          fi
+          yes | "$SDKM" --licenses > /dev/null || true
+          "$SDKM" --install "platforms;android-34" "build-tools;34.0.0"
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('android/gradle/wrapper/gradle-wrapper.properties', 'android/**/*.gradle.kts') }}
+          restore-keys: gradle-${{ runner.os }}-
 
       # The release key is never in the repository. It is stored as the
       # ANDROID_KEYSTORE_BASE64 secret and restored here only for the build.
@@ -93,6 +110,15 @@ jobs:
           distribution: temurin
           java-version: "21"
 
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-desktop-${{ hashFiles('desktop/gradle/wrapper/gradle-wrapper.properties', 'desktop/**/*.gradle.kts') }}
+          restore-keys: gradle-${{ runner.os }}-
+
       - name: Install packaging tools
         run: sudo apt-get update && sudo apt-get install -y rpm
 
@@ -130,6 +156,15 @@ jobs:
         with:
           distribution: temurin
           java-version: "21"
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-desktop-${{ hashFiles('desktop/gradle/wrapper/gradle-wrapper.properties', 'desktop/**/*.gradle.kts') }}
+          restore-keys: gradle-${{ runner.os }}-
 
       - name: Build msi, exe and app image
         run: |
