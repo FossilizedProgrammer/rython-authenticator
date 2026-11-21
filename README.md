@@ -1,5 +1,7 @@
 # Rython-Authenticator
 
+**English** · [فارسی](README.fa.md) · [Русский](README.ru.md) · [Español](README.es.md) · [中文](README.zh.md)
+
 An offline two-password authenticator (TOTP / HOTP / Steam), in one repository with two apps:
 
 | Folder | App | Stack |
@@ -61,3 +63,8 @@ and cannot update an installation signed with the release key.
 
 Keep the keystore and its passwords backed up outside this repository: losing them means
 you can never ship an update that installs over the existing app.
+
+## License
+
+[MIT](LICENSE) — use, modify, redistribute and sell it, with or without changes, as long as
+the copyright notice and permission notice stay in the source.
